@@ -7,7 +7,6 @@ import com.algosoft.challenge.model.entity.Participant;
 import com.algosoft.challenge.model.entity.enums.Situations;
 import com.algosoft.challenge.model.repository.ParticipantRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -50,9 +49,10 @@ public class ParticipantService {
         return participantRepository.save(participant);
     }
 
-    public Participant updateParticipant(Long id, @RequestBody Participant participant) {
+    public Participant updateParticipant(Long id) {
 
         Optional<Participant> participantSaved = participantRepository.findById(id);
+        Participant participant = participantSaved.get();
 
         if (participantSaved.isPresent()) {
             Participant participantUpdate = participantSaved.get();

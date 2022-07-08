@@ -31,8 +31,8 @@ public class CommitmentController {
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity<Commitment> put(@PathVariable Long id, @Valid @RequestBody Commitment commitment) {
-        return ResponseEntity.status(HttpStatus.OK).body(commitmentService.updateCommitment(id, commitment));
+    public ResponseEntity<Commitment> put(@Valid @RequestBody Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(commitmentService.updateCommitment(id));
     }
 
     @DeleteMapping(value = "{id}")

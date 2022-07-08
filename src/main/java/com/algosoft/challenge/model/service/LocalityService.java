@@ -45,9 +45,10 @@ public class LocalityService {
         return localityRepository.save(locality);
     }
 
-    public Locality updateLocality(Long id, @RequestBody Locality locality) {
+    public Locality updateLocality(Long id) {
 
         Optional<Locality> localitySaved = localityRepository.findById(id);
+        Locality locality = localitySaved.get();
 
         if (localitySaved.isPresent()) {
             Locality localityUpdate = localitySaved.get();

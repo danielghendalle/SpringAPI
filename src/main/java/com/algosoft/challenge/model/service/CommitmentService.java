@@ -8,12 +8,9 @@ import com.algosoft.challenge.model.entity.Participant;
 import com.algosoft.challenge.model.entity.enums.Situations;
 import com.algosoft.challenge.model.repository.CommitmentRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -79,10 +76,10 @@ public class CommitmentService {
     }
 
 
-    public Commitment updateCommitment(Long id, @Validated @RequestBody Commitment commitment) {
+    public Commitment updateCommitment(Long id) {
 
         Optional<Commitment> commitmentSaved = commitmentRepository.findById(id);
-
+        Commitment commitment = commitmentSaved.get();
 
         if (commitment.getSituations() == EXECUTADO || commitment.getSituations() == CANCELADO) {
             throw new ErrorException("O compromisso não pode ser alterado porque possui a situação de: " + commitment.getSituations().getSituation().toLowerCase());

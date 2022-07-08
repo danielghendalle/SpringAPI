@@ -29,10 +29,10 @@ public class ParticipantService {
 
         Optional<Participant> participantId = participantRepository.findById(id);
 
-      if (participantId.isPresent()) {
-          return participantId.get();
-      }
-            throw new NotFoundException("Não foi possível encontrar o Participante!");
+        if (participantId.isPresent()) {
+            return participantId.get();
+        }
+        throw new NotFoundException("Não foi possível encontrar o Participante!");
 
     }
 
@@ -54,16 +54,14 @@ public class ParticipantService {
 
         Optional<Participant> participantSaved = participantRepository.findById(id);
 
-        try {
+        if (participantSaved.isPresent()) {
             Participant participantUpdate = participantSaved.get();
             participantUpdate.setName(participant.getName());
             participantUpdate.setPhone(participant.getPhone());
 
             return participantRepository.save(participantUpdate);
-
-        } catch (NotFoundException e) {
-            throw new NotFoundException("Não foi possível encontrar o participante");
         }
+        throw new NotFoundException("Não foi possível encontrar o participante");
     }
 
     public void delete(Long id) {
@@ -76,13 +74,13 @@ public class ParticipantService {
         if (!commitment.isEmpty()) {
             throw new ErrorException("O Participante " + participantDelete.getName() + " não pode ser deletado porque está vinculado a um Comprmisso");
         }
-        try {
+        if (participant.isPresent()) {
             participantRepository.deleteById(id);
             return;
 
-        } catch (NotFoundException e) {
-            throw new NotFoundException("Não foi possível encontrar o Participante");
         }
+        throw new NotFoundException("Não foi possível encontrar o Participante");
+
     }
 }
 

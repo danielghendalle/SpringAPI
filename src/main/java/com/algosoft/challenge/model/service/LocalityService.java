@@ -30,18 +30,17 @@ public class LocalityService {
     public Locality findById(Long id) {
 
 
-        try {
             Optional<Locality> locality = localityRepository.findById(id);
+
+        if (locality.isPresent()) {
             return locality.get();
-
-
-        } catch (NotFoundException e) {
+        }
             throw new NotFoundException("Não foi possível encontrar a Localização");
 
-        }
-    }
 
-    public Locality saveLocality(Locality locality) {
+        }
+
+        public Locality saveLocality(Locality locality) {
 
         return localityRepository.save(locality);
     }
@@ -50,19 +49,16 @@ public class LocalityService {
 
         Optional<Locality> localitySaved = localityRepository.findById(id);
 
-        try {
+        if (localitySaved.isPresent()) {
             Locality localityUpdate = localitySaved.get();
             localityUpdate.setName(locality.getName());
             localityUpdate.setLatitude(locality.getLatitude());
             localityUpdate.setLongitude(locality.getLongitude());
-
-
             return localityRepository.save(localityUpdate);
+        }
 
-        } catch (NotFoundException e) {
             throw new NotFoundException("Não foi possível encontrar a Localização");
         }
-    }
 
     public void delete(Long id) {
 

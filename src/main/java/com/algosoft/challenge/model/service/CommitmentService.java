@@ -35,13 +35,13 @@ public class CommitmentService {
 
     public Commitment findById(Long id) {
 
-        try {
-            Optional<Commitment> commitmentId = commitmentRepository.findById(id);
-            return commitmentId.get();
-        } catch (NotFoundException e) {
 
-            throw new NotFoundException("Não foi possível encontrar o Compromisso!");
+        Optional<Commitment> commitmentId = commitmentRepository.findById(id);
+        if (commitmentId.isPresent()) {
+            return commitmentId.get();
         }
+
+        throw new NotFoundException("Não foi possível encontrar o Compromisso!");
     }
 
 
@@ -88,7 +88,7 @@ public class CommitmentService {
             throw new ErrorException("O compromisso não pode ser alterado porque possui a situação de: " + commitment.getSituations().getSituation().toLowerCase());
         }
 
-        try {
+        if (commitmentSaved.isPresent()) {
             Commitment commitmentUpdate = commitmentSaved.get();
             commitmentUpdate.setDateTime(LocalDateTime.now());
             commitmentUpdate.setDescription(commitment.getDescription());
@@ -98,24 +98,25 @@ public class CommitmentService {
             commitmentRepository.save(commitmentUpdate);
             historicService.generate(commitmentUpdate);
             return commitmentUpdate;
-        } catch (NotFoundException e) {
-            throw new NotFoundException("Não foi possível encontrar o Compromisso!");
         }
+        throw new NotFoundException("Não foi possível encontrar o Compromisso!");
     }
+
 
     public void delete(Long id) {
 
-        Commitment commitment = this.findById(id);
+        Optional<Commitment> commitmentDelete = this.commitmentRepository.findById(id);
+        Commitment commitment = commitmentDelete.get();
 
         if (commitment.getSituations() == EXECUTADO || commitment.getSituations() == CANCELADO) {
             throw new ErrorException("O compromisso não pode ser excluído porque possui a situação de: " + commitment.getSituations().getSituation().toLowerCase());
         }
-        try {
+        if (commitmentDelete.isPresent()) {
             historicService.delete(id);
             commitmentRepository.deleteById(id);
-        } catch (NotFoundException e) {
-            throw new NotFoundException("Não foi possível encontrar o Compromisso!");
         }
+        throw new NotFoundException("Não foi possível encontrar o Compromisso!");
     }
 }
+
 

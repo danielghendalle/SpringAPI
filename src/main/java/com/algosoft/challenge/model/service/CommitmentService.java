@@ -29,10 +29,7 @@ public class CommitmentService {
         this.historicService = historicService;
     }
 
-
     public Commitment findById(Long id) {
-
-
         Optional<Commitment> commitmentId = commitmentRepository.findById(id);
         if (commitmentId.isPresent()) {
             return commitmentId.get();
@@ -41,17 +38,14 @@ public class CommitmentService {
         throw new NotFoundException("Não foi possível encontrar o Compromisso!");
     }
 
-
     public Commitment saveCommitment(Commitment commitment) {
         List<Participant> participants = commitment.getParticipants().stream().filter(p -> exists(p, commitment)).collect(Collectors.toList());
         if (!participants.isEmpty()) {
             throw new ErrorException("O participante já está em um Compromisso ou possui um compromisso pendente");
         }
-
         Commitment save = this.commitmentRepository.save(commitment);
         historicService.generate(save);
         return save;
-
     }
 
     private boolean exists(Participant participant, Commitment commitment) {
@@ -61,30 +55,24 @@ public class CommitmentService {
     }
 
     public List<Commitment> findByParticipants(Participant participant) {
-
         return commitmentRepository.findByParticipants(participant);
     }
 
     public List<Commitment> findByLocality(Locality locality) {
-
         return commitmentRepository.findByLocality(locality);
     }
 
     public List<Commitment> findByParticipantsWithSituation(Participant participant, Situations situations) {
-
         return commitmentRepository.findByParticipantsAndSituations(participant, situations);
     }
-
 
     public Commitment updateCommitment(Long id, Commitment commitment) {
 
         Optional<Commitment> commitmentSaved = commitmentRepository.findById(id);
 
-
         if (commitment.getSituations() == EXECUTADO || commitment.getSituations() == CANCELADO) {
             throw new ErrorException("O compromisso não pode ser alterado porque possui a situação de: " + commitment.getSituations().getSituation().toLowerCase());
         }
-
         if (commitmentSaved.isPresent()) {
             Commitment commitmentUpdate = commitmentSaved.get();
             commitmentUpdate.setDateTime(LocalDateTime.now());
@@ -99,16 +87,15 @@ public class CommitmentService {
         throw new NotFoundException("Não foi possível encontrar o Compromisso!");
     }
 
-
     public void delete(Long id) {
 
         Optional<Commitment> commitmentDelete = this.commitmentRepository.findById(id);
+        if (commitmentDelete.isPresent()) {
         Commitment commitment = commitmentDelete.get();
 
         if (commitment.getSituations() == EXECUTADO || commitment.getSituations() == CANCELADO) {
             throw new ErrorException("O compromisso não pode ser excluído porque possui a situação de: " + commitment.getSituations().getSituation().toLowerCase());
         }
-        if (commitmentDelete.isPresent()) {
             historicService.delete(id);
             commitmentRepository.deleteById(id);
         }

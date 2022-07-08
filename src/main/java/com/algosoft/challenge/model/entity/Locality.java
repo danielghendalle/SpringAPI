@@ -4,7 +4,6 @@ package com.algosoft.challenge.model.entity;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Locality extends GeneralEntity {

@@ -23,9 +23,7 @@ public class ParticipantService {
         this.commitmentService = commitmentService;
     }
 
-
     public Participant findById(Long id) {
-
         Optional<Participant> participantId = participantRepository.findById(id);
 
         if (participantId.isPresent()) {
@@ -66,6 +64,7 @@ public class ParticipantService {
     public void delete(Long id) {
 
         Optional<Participant> participant = participantRepository.findById(id);
+        if (participant.isPresent()) {
         Participant participantDelete = participant.get();
 
         List<Commitment> commitment = commitmentService.findByParticipants(participantDelete);
@@ -73,13 +72,10 @@ public class ParticipantService {
         if (!commitment.isEmpty()) {
             throw new ErrorException("O Participante " + participantDelete.getName() + " não pode ser deletado porque está vinculado a um Comprmisso");
         }
-        if (participant.isPresent()) {
             participantRepository.deleteById(id);
             return;
-
         }
         throw new NotFoundException("Não foi possível encontrar o Participante");
-
     }
 }
 

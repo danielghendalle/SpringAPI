@@ -76,10 +76,10 @@ public class CommitmentService {
     }
 
 
-    public Commitment updateCommitment(Long id) {
+    public Commitment updateCommitment(Long id, Commitment commitment) {
 
         Optional<Commitment> commitmentSaved = commitmentRepository.findById(id);
-        Commitment commitment = commitmentSaved.get();
+
 
         if (commitment.getSituations() == EXECUTADO || commitment.getSituations() == CANCELADO) {
             throw new ErrorException("O compromisso não pode ser alterado porque possui a situação de: " + commitment.getSituations().getSituation().toLowerCase());

@@ -45,10 +45,9 @@ public class LocalityService {
         return localityRepository.save(locality);
     }
 
-    public Locality updateLocality(Long id) {
+    public Locality updateLocality(Long id, @RequestBody Locality locality) {
 
         Optional<Locality> localitySaved = localityRepository.findById(id);
-        Locality locality = localitySaved.get();
 
         if (localitySaved.isPresent()) {
             Locality localityUpdate = localitySaved.get();
@@ -60,6 +59,7 @@ public class LocalityService {
 
             throw new NotFoundException("Não foi possível encontrar a Localização");
         }
+
 
     public void delete(Long id) {
 

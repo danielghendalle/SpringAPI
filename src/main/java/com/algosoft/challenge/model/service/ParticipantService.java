@@ -49,10 +49,9 @@ public class ParticipantService {
         return participantRepository.save(participant);
     }
 
-    public Participant updateParticipant(Long id) {
+    public Participant updateParticipant(Long id, Participant participant) {
 
         Optional<Participant> participantSaved = participantRepository.findById(id);
-        Participant participant = participantSaved.get();
 
         if (participantSaved.isPresent()) {
             Participant participantUpdate = participantSaved.get();

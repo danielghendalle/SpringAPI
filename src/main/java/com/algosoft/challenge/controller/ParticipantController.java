@@ -44,8 +44,8 @@ public class ParticipantController {
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity<Participant> put(@Valid @RequestBody @PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(participantService.updateParticipant(id));
+    public ResponseEntity<Participant> put(@PathVariable Long id, @Valid @RequestBody Participant participant) {
+        return ResponseEntity.status(HttpStatus.OK).body(participantService.updateParticipant(id, participant));
 
     }
 

@@ -30,8 +30,8 @@ public class LocalityController {
     }
 
     @PutMapping(value = "{id}")
-    public ResponseEntity<Locality> put(@Valid @RequestBody @PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(localityService.updateLocality(id));
+    public ResponseEntity<Locality> put(@PathVariable Long id, @Valid @RequestBody Locality locality) {
+        return ResponseEntity.status(HttpStatus.OK).body(localityService.updateLocality(id, locality));
 
     }
 

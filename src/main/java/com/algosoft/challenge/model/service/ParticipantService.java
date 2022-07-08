@@ -29,11 +29,11 @@ public class ParticipantService {
 
         Optional<Participant> participantId = participantRepository.findById(id);
 
-        try {
-            return participantId.get();
-        } catch (NotFoundException e) {
+      if (participantId.isPresent()) {
+          return participantId.get();
+      }
             throw new NotFoundException("Não foi possível encontrar o Participante!");
-        }
+
     }
 
     public List<Commitment> findCommitments(Long id) {
@@ -72,7 +72,7 @@ public class ParticipantService {
         Participant participantDelete = participant.get();
 
         List<Commitment> commitment = commitmentService.findByParticipants(participantDelete);
-        
+
         if (!commitment.isEmpty()) {
             throw new ErrorException("O Participante " + participantDelete.getName() + " não pode ser deletado porque está vinculado a um Comprmisso");
         }
